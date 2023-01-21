@@ -1,5 +1,6 @@
 {
   "root": true,
+  "extends": "plugin:prettier/recommended",
   "ignorePatterns": ["**/*"],
   "plugins": ["@nrwl/nx"],
   "overrides": [

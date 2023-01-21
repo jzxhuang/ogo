@@ -1,18 +1,24 @@
-import { AppProps } from 'next/app';
-import Head from 'next/head';
-import './styles.css';
+import { type Session } from 'next-auth'
+import { SessionProvider } from 'next-auth/react'
+import { type AppType } from 'next/app'
+import Head from 'next/head'
 
-function CustomApp({ Component, pageProps }: AppProps) {
+import { api } from '../src/utils/api'
+import './styles.css'
+
+const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps: { session, ...pageProps } }) => {
   return (
     <>
       <Head>
         <title>Welcome to ogo-webapp!</title>
       </Head>
       <main className="app">
-        <Component {...pageProps} />
+        <SessionProvider session={session}>
+          <Component {...pageProps} />
+        </SessionProvider>
       </main>
     </>
-  );
+  )
 }
 
-export default CustomApp;
+export default api.withTRPC(MyApp)
