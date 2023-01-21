@@ -1,33 +1,68 @@
 import { TRPCError } from '@trpc/server'
 import { getHTTPStatusCodeFromError } from '@trpc/server/http'
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { NextRequest, NextResponse } from 'next/server'
 
 import { appRouter } from '../../../src/server/api/root'
-import { createTRPCContext } from '../../../src/server/api/trpc'
+import { createTRPCContextEdge } from '../../../src/server/api/trpc'
+
+export const config = {
+  runtime: 'edge',
+}
 
 /**
  * Get a golink by name.
  * Docs: https://create.t3.gg/en/usage/trpc#expose-a-single-procedure-externally
  */
-const getGolinkByNameHandler = async (req: NextApiRequest, res: NextApiResponse) => {
+const getGolinkByNameHandler = async (req: NextRequest) => {
   // Create context and caller
-  const ctx = await createTRPCContext({ req, res })
+  const ctx = await createTRPCContextEdge(req)
   const caller = appRouter.createCaller(ctx)
+
+  const name = req.nextUrl.pathname.split('/').pop() as string
+
   try {
-    const { name } = req.query
-    const url = await caller.go.getLink(name as string)
-    console.log('XXX url:', url)
-    res.status(200).json(url)
+    const url = await caller.go.getLink(name)
+    return new NextResponse(JSON.stringify(url), {
+      status: 200,
+      headers: { 'content-type': 'application/json' },
+    })
   } catch (cause) {
     if (cause instanceof TRPCError) {
       // An error from tRPC occurred
       const httpCode = getHTTPStatusCodeFromError(cause)
-      return res.status(httpCode).json(cause)
+      return new NextResponse(JSON.stringify(cause), {
+        status: httpCode,
+        headers: { 'content-type': 'application/json' },
+      })
     }
+    const f = new NextResponse(JSON.stringify({ message: 'Internal server error' }), {
+      status: 500,
+      headers: { 'content-type': 'application/json' },
+    })
     // Another error occurred
     console.error(cause)
-    res.status(500).json({ message: 'Internal server error' })
+    return new NextResponse(JSON.stringify({ message: 'Internal server error' }), {
+      status: 500,
+      headers: { 'content-type': 'application/json' },
+    })
   }
+
+  // Serverless runtime equivalent
+  // try {
+  //   const { name } = req.
+  //   const url = await caller.go.getLink(name as string)
+  //   console.log('XXX url:', url)
+  //   res.status(200).json(url)
+  // } catch (cause) {
+  //   if (cause instanceof TRPCError) {
+  //     // An error from tRPC occurred
+  //     const httpCode = getHTTPStatusCodeFromError(cause)
+  //     return res.status(httpCode).json(cause)
+  //   }
+  //   // Another error occurred
+  //   console.error(cause)
+  //   res.status(500).json({ message: 'Internal server error' })
+  // }
 }
 
 export default getGolinkByNameHandler

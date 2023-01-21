@@ -22,6 +22,10 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  // JWT session is requried for edge runtime: https://next-auth.js.org/configuration/nextjs#caveats
+  session: {
+    strategy: 'jwt',
+  },
 }
 
 export default NextAuth(authOptions)

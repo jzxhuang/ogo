@@ -24,11 +24,11 @@
  * transformer
  */
 import { TRPCError, initTRPC } from '@trpc/server'
-import { type CreateNextContextOptions } from '@trpc/server/adapters/next'
 import { type Session } from 'next-auth'
+import { JWT } from 'next-auth/jwt'
+import withAuth, { NextRequestWithAuth } from 'next-auth/middleware'
+import { NextRequest } from 'next/server'
 import superjson from 'superjson'
-
-import { getServerAuthSession } from '../auth'
 
 type CreateContextOptions = {
   session: Session | null
@@ -51,21 +51,55 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
 
 /**
  * This is the actual context you'll use in your router. It will be used to
- * process every request that goes through your tRPC endpoint
+ * process every request that goes through your tRPC endpoint.
+ * Use this with serverless runtime
  * @link https://trpc.io/docs/context
  */
-export const createTRPCContext = async (opts: CreateNextContextOptions) => {
-  const { req, res } = opts
+// export const createTRPCContext = async (opts: CreateNextContextOptions) => {
+//   const { req, res } = opts
 
-  // Get the session from the server using the unstable_getServerSession wrapper function
-  const session = await getServerAuthSession({ req, res })
+//   // Get the session from the server using the unstable_getServerSession wrapper function
+//   const session = await getServerAuthSession({ req, res })
+
+//   return createInnerTRPCContext({
+//     session,
+//   })
+// }
+
+/**
+ * This is the actual context you'll use in your router. It will be used to
+ * process every request that goes through your tRPC endpoint.
+ * Compatible with edge runtime
+ * @link https://trpc.io/docs/context
+ */
+export const createTRPCContextEdge = async (req: NextRequest) => {
+  let parsedToken: JWT | null = null
+
+  // We cast `args.req` as `NextRequestWithAuth` to satisfy the type checker
+  // Really, it's `NextRequest` type
+  await withAuth(req as NextRequestWithAuth, {
+    callbacks: {
+      authorized: ({ token }) => {
+        console.log('XXX token:', token)
+        if (token) {
+          parsedToken = token
+        }
+        return true
+      },
+    },
+  })
+
+  // TODO: implement this
+  // let session = null
+  // if (parsedToken) {
+  //   session = {
 
   return createInnerTRPCContext({
-    session,
+    session: null,
   })
 }
 
-const t = initTRPC.context<typeof createTRPCContext>().create({
+const t = initTRPC.context<typeof createTRPCContextEdge>().create({
   transformer: superjson,
   errorFormatter({ shape }) {
     return shape
