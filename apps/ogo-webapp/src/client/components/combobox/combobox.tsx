@@ -15,7 +15,7 @@ export const Combobox = memo(function Combobox() {
 
   return (
     <form
-      className="flex w-full overflow-hidden rounded-md border border-white bg-transparent text-2xl text-white"
+      className="flex w-4/5 overflow-hidden rounded-md border border-white bg-transparent text-2xl text-white md:w-[32rem]"
       onSubmit={onSubmit}
     >
       <label htmlFor="link" className="flex py-3 pl-4">

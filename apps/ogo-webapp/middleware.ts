@@ -18,15 +18,12 @@ export async function middleware(request: NextRequest) {
     }
   } catch (error) {
     console.error('Error reading edge config:', error)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     isError = true
-    // swallow error
+    throw error
+    // TODO: if something goes wrong, we should show a nice error page
   }
 
   // Fallback for error or if go link doesn't exist
-  const url = new URL('/go', request.url)
-  const searchParams = new URLSearchParams({ source: linkName })
-  if (isError) {
-    searchParams.set('error', 'true')
-  }
-  return NextResponse.redirect(`${url.toString()}?${searchParams.toString()}`)
+  return NextResponse.next()
 }

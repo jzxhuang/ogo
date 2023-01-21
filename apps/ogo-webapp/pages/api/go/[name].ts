@@ -48,7 +48,6 @@ const getGolinkByNameHandler = async (req: NextRequest) => {
   // try {
   //   const { name } = req.
   //   const url = await caller.go.getLink(name as string)
-  //   console.log('XXX url:', url)
   //   res.status(200).json(url)
   // } catch (cause) {
   //   if (cause instanceof TRPCError) {
