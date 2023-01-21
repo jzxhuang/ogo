@@ -10,7 +10,7 @@ export const config = {
 }
 
 /**
- * Get a golink by name.
+ * Get a go link by name.
  * Docs: https://create.t3.gg/en/usage/trpc#expose-a-single-procedure-externally
  */
 const getGolinkByNameHandler = async (req: NextRequest) => {
@@ -21,8 +21,8 @@ const getGolinkByNameHandler = async (req: NextRequest) => {
   const name = req.nextUrl.pathname.split('/').pop() as string
 
   try {
-    const url = await caller.go.getLink(name)
-    return new NextResponse(JSON.stringify(url), {
+    const goLink = await caller.go.getLink(name)
+    return new NextResponse(JSON.stringify(goLink), {
       status: 200,
       headers: { 'content-type': 'application/json' },
     })
@@ -35,10 +35,7 @@ const getGolinkByNameHandler = async (req: NextRequest) => {
         headers: { 'content-type': 'application/json' },
       })
     }
-    const f = new NextResponse(JSON.stringify({ message: 'Internal server error' }), {
-      status: 500,
-      headers: { 'content-type': 'application/json' },
-    })
+
     // Another error occurred
     console.error(cause)
     return new NextResponse(JSON.stringify({ message: 'Internal server error' }), {

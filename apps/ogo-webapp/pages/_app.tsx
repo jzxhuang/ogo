@@ -11,14 +11,12 @@ const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps: { s
   return (
     <>
       <Head>
-        <title>Welcome to ogo-webapp!</title>
+        <title>Open Source Go Links — ogo</title>
       </Head>
       <ReactQueryDevtools position="bottom-right" />
-      <main className="app">
-        <SessionProvider session={session}>
-          <Component {...pageProps} />
-        </SessionProvider>
-      </main>
+      <SessionProvider session={session}>
+        <Component {...pageProps} />
+      </SessionProvider>
     </>
   )
 }

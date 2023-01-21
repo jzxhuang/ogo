@@ -7,5 +7,7 @@ module.exports = {
   importOrder: ['<THIRD_PARTY_MODULES>', '^[./]', '.*[.](s?css)$'],
   importOrderSeparation: true, // adds new line between each import declaration group
   importOrderSortSpecifiers: true, // sorts each specifier within a single import`
-  plugins: [require.resolve('prettier-plugin-tailwindcss')],
+  plugins: ['@trivago/prettier-plugin-sort-imports', 'prettier-plugin-tailwindcss'],
+  pluginSearchDirs: false,
+  tailwindConfig: './apps/ogo-webapp/tailwind.config.js',
 }

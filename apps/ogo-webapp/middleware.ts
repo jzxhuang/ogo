@@ -1,5 +1,6 @@
-import { getGolink } from 'apps/ogo-webapp/src/server/edge-config'
 import { NextRequest, NextResponse } from 'next/server'
+
+import { getGoLink } from './src/server/edge-config'
 
 export const config = { matcher: '/go/:path+' }
 
@@ -9,11 +10,11 @@ export async function middleware(request: NextRequest) {
 
   let isError = false
   try {
-    const linkUrl = await getGolink(linkName)
+    const goLink = await getGoLink(linkName)
 
-    if (linkUrl) {
+    if (goLink) {
       const trailingPathname = splitPathname.slice(3).join('/')
-      return NextResponse.redirect(`${linkUrl}/${trailingPathname}${request.nextUrl.search}`)
+      return NextResponse.redirect(`${goLink.url}/${trailingPathname}${request.nextUrl.search}`)
     }
   } catch (error) {
     console.error('Error reading edge config:', error)
@@ -21,7 +22,7 @@ export async function middleware(request: NextRequest) {
     // swallow error
   }
 
-  // Fallback for error or if golink doesn't exist
+  // Fallback for error or if go link doesn't exist
   const url = new URL('/go', request.url)
   const searchParams = new URLSearchParams({ source: linkName })
   if (isError) {

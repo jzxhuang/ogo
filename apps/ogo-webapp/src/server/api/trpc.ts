@@ -73,6 +73,7 @@ const createInnerTRPCContext = (opts: CreateContextOptions) => {
  * @link https://trpc.io/docs/context
  */
 export const createTRPCContextEdge = async (req: NextRequest) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let parsedToken: JWT | null = null
 
   // We cast `args.req` as `NextRequestWithAuth` to satisfy the type checker
