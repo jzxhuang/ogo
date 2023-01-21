@@ -1,4 +1,5 @@
 import { exampleRouter } from './routers/example'
+import { goRouter } from './routers/go'
 import { createTRPCRouter } from './trpc'
 
 /**
@@ -8,6 +9,7 @@ import { createTRPCRouter } from './trpc'
  */
 export const appRouter = createTRPCRouter({
   example: exampleRouter,
+  go: goRouter,
 })
 
 // export type definition of API

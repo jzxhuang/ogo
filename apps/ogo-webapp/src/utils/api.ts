@@ -43,6 +43,11 @@ export const api = createTRPCNext<AppRouter>({
           url: `${getBaseUrl()}/api/trpc`,
         }),
       ],
+
+      /**
+       * @link https://tanstack.com/query/v4/docs/reference/QueryClient
+       **/
+      // queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
     }
   },
   /**
