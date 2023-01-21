@@ -81,7 +81,7 @@ export const createTRPCContextEdge = async (req: NextRequest) => {
   await withAuth(req as NextRequestWithAuth, {
     callbacks: {
       authorized: ({ token }) => {
-        console.log('XXX token:', token)
+        // console.log('XXX token:', token)
         if (token) {
           parsedToken = token
         }

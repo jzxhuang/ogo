@@ -5,7 +5,7 @@ import { GoLinkNotFound } from '../../src/client/views/go-link-not-found'
 import { convertQueryParamToString } from '../../src/utils/query-params'
 
 export const config = {
-  runtime: 'edge',
+  runtime: 'experimental-edge',
 }
 
 /**

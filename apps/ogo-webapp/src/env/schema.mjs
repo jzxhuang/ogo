@@ -16,6 +16,9 @@ export const serverSchema = z.object({
     process.env.VERCEL ? z.string() : z.string().url()
   ),
   EDGE_CONFIG: z.string(),
+  EDGE_CONFIG_ID: z.string(),
+  VERCEL_API_TOKEN: z.string(),
+  VERCEL_TEAM_ID: z.string().optional(),
 })
 
 /**
@@ -28,6 +31,9 @@ export const serverEnv = {
   NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   EDGE_CONFIG: process.env.EDGE_CONFIG,
+  EDGE_CONFIG_ID: process.env.EDGE_CONFIG_ID,
+  VERCEL_API_TOKEN: process.env.VERCEL_API_TOKEN,
+  VERCEL_TEAM_ID: process.env.VERCEL_TEAM_ID,
 }
 
 /**
