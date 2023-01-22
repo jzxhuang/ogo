@@ -1,6 +1,6 @@
+import { GoLink } from '@/types'
+import { get } from '@vercel/edge-config'
 import { NextRequest, NextResponse } from 'next/server'
-
-import { getGoLink } from './src/server/edge-config'
 
 export const config = { matcher: '/go/:path+' }
 
@@ -10,7 +10,7 @@ export async function middleware(request: NextRequest) {
 
   let isError = false
   try {
-    const goLink = await getGoLink(linkName)
+    const goLink = await get<GoLink>(linkName)
 
     if (goLink) {
       const trailingPathname = splitPathname.slice(3).join('/')

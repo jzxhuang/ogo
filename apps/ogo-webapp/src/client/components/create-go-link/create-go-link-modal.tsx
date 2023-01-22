@@ -1,8 +1,8 @@
+import { edgeConfigLimits } from '@/constants'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, memo, useCallback, useState } from 'react'
 
 import { api } from '../../../utils/api'
-import { edgeConfigLimits } from '../../../utils/edge-config-limits'
 
 type CreateGoLinkProps = {
   isOpen: boolean
@@ -63,7 +63,7 @@ type CreateGoLinkFormProps = {
 
 const CreateGoLinkForm = memo(function CreateGoLinkForm(props: CreateGoLinkFormProps) {
   const { onCancel, onDone } = props
-  const upsertGoLinkMutation = api.go.upsertGolink.useMutation()
+  const upsertGoLinkMutation = api.goLink.upsert.useMutation()
 
   const [url, setUrl] = useState(props.url ?? '')
   const [name, setName] = useState(props.name ?? '')

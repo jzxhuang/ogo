@@ -21,7 +21,7 @@ const getGolinkByNameHandler = async (req: NextRequest) => {
   const name = req.nextUrl.pathname.split('/').pop() as string
 
   try {
-    const goLink = await caller.go.getLink(name)
+    const goLink = await caller.goLink.get(name)
     return new NextResponse(JSON.stringify(goLink), {
       status: 200,
       headers: { 'content-type': 'application/json' },

@@ -4,7 +4,7 @@ import { api } from '../../utils/api'
 import { Combobox } from '../components/combobox/combobox'
 
 export const Homepage = memo(function Homepage() {
-  const _go = api.go.getLink.useQuery('gh')
+  const _go = api.goLink.get.useQuery('gh')
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
