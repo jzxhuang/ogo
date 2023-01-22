@@ -14,7 +14,14 @@ export async function middleware(request: NextRequest) {
 
     if (goLink) {
       const trailingPathname = splitPathname.slice(3).join('/')
-      return NextResponse.redirect(`${goLink.url}/${trailingPathname}${request.nextUrl.search}`)
+      const searchParams = request.nextUrl.searchParams
+      // Need to delete this query parameter, otherwise it gets injected by Next.js
+      // when using router.push(`/go/${linkName}`), since the we have a dynamic route
+      // at /go/[...name].
+      searchParams.delete('name')
+
+      const search = searchParams.toString()
+      return NextResponse.redirect(`${goLink.url}/${trailingPathname}${search ? `?${search}` : ''}`)
     }
   } catch (error) {
     console.error('Error reading edge config:', error)
