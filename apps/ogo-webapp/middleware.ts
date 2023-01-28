@@ -17,8 +17,8 @@ export async function middleware(request: NextRequest) {
       const searchParams = request.nextUrl.searchParams
       // Need to delete this query parameter, otherwise it gets injected by Next.js
       // when using router.push(`/go/${linkName}`), since the we have a dynamic route
-      // at /go/[...name].
-      searchParams.delete('name')
+      // at /go/[...go-link-name].
+      searchParams.delete('go-link-name')
 
       const search = searchParams.toString()
       return NextResponse.redirect(`${goLink.url}/${trailingPathname}${search ? `?${search}` : ''}`)

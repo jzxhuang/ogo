@@ -7,6 +7,8 @@ import { GoLinkNotFound } from '../../src/client/views/go-link-not-found'
 import { appRouter } from '../../src/server/api/root'
 import { convertQueryParamToString } from '../../src/utils/query-params'
 
+const PATH_NAME_PARAM = 'go-link-name'
+
 export const config = {
   runtime: 'experimental-edge',
 }
@@ -15,7 +17,7 @@ export const config = {
  * Empty SSR function so that `router.query` is defined on the initial render.
  */
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const name = convertQueryParamToString(context.query.name)
+  const name = convertQueryParamToString(context.query[PATH_NAME_PARAM])
   const ssr = createProxySSGHelpers({
     router: appRouter,
     ctx: { session: null },
@@ -35,10 +37,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
  * We use SSR on this page to get the dynamic route segment on the initial render.
  */
 function GoLinkNotFoundPage() {
-  const {
-    query: { name },
-  } = useRouter()
-  return <GoLinkNotFound linkName={convertQueryParamToString(name)} />
+  const { query } = useRouter()
+  return <GoLinkNotFound linkName={convertQueryParamToString(query[PATH_NAME_PARAM])} />
 }
 
 export default GoLinkNotFoundPage
