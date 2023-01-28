@@ -20,7 +20,7 @@ export const GoLinkNotFound = memo(function GoLinkNotFound(props: GoLinkNotFound
     <>
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div className="container flex w-full max-w-2xl flex-col items-center justify-center gap-10 px-4 py-16">
-          <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
+          <h1 className="text-center text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
             Oops! <span className="text-purple-500">go/{linkName}</span> not found
           </h1>
 

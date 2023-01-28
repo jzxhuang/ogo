@@ -59,12 +59,13 @@ export const goLinkRouter = createTRPCRouter({
 
   upsert: publicProcedure.input(upsertGoLinkReqSchema).mutation(({ input }) => {
     const { name, ...value } = input
+    const now = Date.now()
     return patch(
       [
         {
           operation: 'upsert',
           key: name,
-          value,
+          value: { ...value, createdAt: now, updatedAt: now },
         },
       ],
       patchEdgeConfigOpts
