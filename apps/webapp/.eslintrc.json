@@ -5,7 +5,7 @@
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "@next/next/no-html-link-for-pages": ["error", "apps/ogo-webapp/pages"]
+        "@next/next/no-html-link-for-pages": ["error", "apps/webapp/pages"]
       }
     },
     {
