@@ -1,0 +1,27 @@
+{
+  "name": "ogo-browser-extension",
+  "displayName": "Ogo: Open Source Go Links",
+  "version": "0.0.1",
+  "description": "Browser extension for ogo go links",
+  "author": "jzxhuang",
+  "dependencies": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "manifest": {
+    "host_permissions": [
+      "https://*/*"
+    ],
+    "permissions": [
+      "tabs"
+    ],
+    "commands": {
+      "_execute_action": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+Y",
+          "mac": "Command+Shift+Y"
+        }
+      }
+    }
+  }
+}
