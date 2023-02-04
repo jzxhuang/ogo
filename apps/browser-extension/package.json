@@ -14,7 +14,7 @@
     ],
     "permissions": [
       "declarativeNetRequest",
-      "declarativeNetRequestFeedback",
+      "storage",
       "tabs"
     ],
     "commands": {
