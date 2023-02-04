@@ -1,6 +1,6 @@
 {
   "name": "ogo-browser-extension",
-  "displayName": "Ogo: Open Source Go Links",
+  "displayName": "ogo: open source go links",
   "version": "0.0.1",
   "description": "Browser extension for ogo go links",
   "author": "jzxhuang",
@@ -10,9 +10,11 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://*/*"
+      "*://go/*"
     ],
     "permissions": [
+      "declarativeNetRequest",
+      "declarativeNetRequestFeedback",
       "tabs"
     ],
     "commands": {

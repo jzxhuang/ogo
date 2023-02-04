@@ -1,6 +1,7 @@
 {
   "name": "ogo",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "description": "open source go links",
   "license": "MIT",
   "scripts": {
     "build": "nx build",
