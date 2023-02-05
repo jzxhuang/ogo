@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@/backend/edge-config": ["libs/backend/edge-config/src/index.ts"],
+      "@/components/*": ["libs/frontend/components/src/*"],
       "@/constants": ["libs/shared/constants/src/index.ts"],
       "@/types": ["libs/shared/types/src/index.ts"]
     },
