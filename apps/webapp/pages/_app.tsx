@@ -12,6 +12,10 @@ const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps: { s
     <>
       <Head>
         <title>Open Source Go Links — ogo</title>
+        <meta
+          name="description"
+          content="Free, easy-to-setup go links built on Vercel Edge Config — no database required."
+        />
       </Head>
       <ReactQueryDevtools position="bottom-right" />
       <SessionProvider session={session}>

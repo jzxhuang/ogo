@@ -1,10 +1,8 @@
 import { PatchEdgeConfigOpts, patch } from '@/backend/edge-config'
-import { edgeConfigLimits } from '@/constants'
-import { GoLink } from '@/types'
+import { GoLink, goLinkNameSchema, newGoLinkSchema } from '@/types'
 import { TRPCError } from '@trpc/server'
 import { get, getAll } from '@vercel/edge-config'
 import fuzzysort from 'fuzzysort'
-import { z } from 'zod'
 
 import { env } from '../../../env/server.mjs'
 import { createTRPCRouter, publicProcedure } from '../trpc'
@@ -14,14 +12,6 @@ const patchEdgeConfigOpts: PatchEdgeConfigOpts = {
   vercelApiToken: env.VERCEL_API_TOKEN,
   vercelTeamId: env.VERCEL_TEAM_ID,
 }
-
-const goLinkNameSchema = z.string().trim().min(1).regex(edgeConfigLimits.keyRegex).max(edgeConfigLimits.maxKeyLength)
-
-const upsertGoLinkReqSchema = z.object({
-  name: goLinkNameSchema,
-  url: z.string().url().trim(),
-  description: z.string().optional(),
-})
 
 type SearchMatch =
   | (Pick<Fuzzysort.Result, 'score' | 'target'> & { highlighted: string | null; indexes: number[] })
@@ -57,15 +47,24 @@ export const goLinkRouter = createTRPCRouter({
     return { goLink }
   }),
 
-  upsert: publicProcedure.input(upsertGoLinkReqSchema).mutation(({ input }) => {
+  create: publicProcedure.input(newGoLinkSchema).mutation(async ({ input }) => {
     const { name, ...value } = input
+
+    const goLink = await get<GoLink>(name)
+    if (goLink) {
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: `Go link already exists for: go/${name}.`,
+      })
+    }
+
     const now = Date.now()
     return patch(
       [
         {
-          operation: 'upsert',
+          operation: 'create',
           key: name,
-          value: { ...value, createdAt: now, updatedAt: now },
+          value: { ...value, createdAt: now },
         },
       ],
       patchEdgeConfigOpts
@@ -78,7 +77,7 @@ export const goLinkRouter = createTRPCRouter({
       return { total: 0, results: [] }
     }
     const itemsToSearch = Object.entries(allItems).map(([key, value]) => ({ ...value, key }))
-    console.log('XXX itemsToSearch:', itemsToSearch)
+    // console.log('XXX itemsToSearch:', itemsToSearch)
     // console.log('XXX allItems:', allItems)
 
     const searchResults = fuzzysort.go(input, itemsToSearch, {

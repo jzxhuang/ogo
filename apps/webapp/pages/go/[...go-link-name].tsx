@@ -13,9 +13,6 @@ export const config = {
   runtime: 'experimental-edge',
 }
 
-/**
- * Empty SSR function so that `router.query` is defined on the initial render.
- */
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const name = convertQueryParamToString(context.query[PATH_NAME_PARAM])
   const ssr = createProxySSGHelpers({
