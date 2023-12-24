@@ -1,0 +1,43 @@
+'use client'
+
+import { useRouter } from 'next/navigation'
+import { memo, useCallback, useState } from 'react'
+
+export const Combobox = memo(function Combobox() {
+  const [inputValue, setInputValue] = useState('')
+  const router = useRouter()
+
+  const onSubmit: React.FormEventHandler = useCallback(
+    (e) => {
+      e.preventDefault()
+      router.push(`/go/${inputValue}`)
+    },
+    [inputValue, router],
+  )
+
+  return (
+    <form
+      className="flex w-full overflow-hidden rounded-md border border-gray-300 bg-transparent text-2xl text-white
+      focus-within:border-white focus-within:outline-2 focus-within:outline-transparent focus-within:ring-0 focus-within:ring-white focus-within:ring-opacity-50"
+      onSubmit={onSubmit}
+    >
+      <label className="flex py-3 pl-4" htmlFor="link">
+        go <span className="px-1 font-bold text-purple-500">/</span>
+      </label>
+      <input
+        autoComplete="off"
+        autoCorrect="off"
+        // eslint-disable-next-line jsx-a11y/no-autofocus -- allow autofocus
+        autoFocus
+        className="w-full border-none bg-transparent pl-0 text-2xl focus:shadow-none focus:outline-none focus:ring-0"
+        id="link"
+        onChange={(e) => {
+          setInputValue(e.target.value)
+        }}
+        placeholder="link"
+        type="text"
+        value={inputValue}
+      />
+    </form>
+  )
+})
