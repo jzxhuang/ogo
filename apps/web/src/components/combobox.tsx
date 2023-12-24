@@ -17,19 +17,20 @@ export const Combobox = memo(function Combobox() {
 
   return (
     <form
-      className="flex w-full overflow-hidden rounded-md border border-gray-300 bg-transparent text-2xl text-white
-      focus-within:border-white focus-within:outline-2 focus-within:outline-transparent focus-within:ring-0 focus-within:ring-white focus-within:ring-opacity-50"
+      className="flex w-4/5 overflow-hidden rounded-md border border-gray-300 bg-transparent text-2xl text-white
+      focus-within:border-sky-300 focus-within:ring-1 focus-within:ring-sky-300"
       onSubmit={onSubmit}
     >
-      <label className="flex py-3 pl-4" htmlFor="link">
-        go <span className="px-1 font-bold text-purple-500">/</span>
+      <label className="flex items-center pl-4" htmlFor="link">
+        <span className="py-3">go</span>
+        <span className="px-1 font-bold text-sky-300">/</span>
       </label>
       <input
         autoComplete="off"
         autoCorrect="off"
         // eslint-disable-next-line jsx-a11y/no-autofocus -- allow autofocus
         autoFocus
-        className="w-full border-none bg-transparent pl-0 text-2xl focus:shadow-none focus:outline-none focus:ring-0"
+        className="w-full border-none bg-transparent pl-0 text-2xl focus-visible:shadow-none focus-visible:outline-none focus-visible:ring-0"
         id="link"
         onChange={(e) => {
           setInputValue(e.target.value)
