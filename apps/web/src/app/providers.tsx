@@ -6,7 +6,7 @@ import * as React from 'react'
 
 export function Providers({ children, ...props }: ThemeProviderProps) {
   return (
-    <NextThemesProvider attribute="class" defaultTheme="system" disableTransitionOnChange {...props}>
+    <NextThemesProvider attribute="class" defaultTheme="system" disableTransitionOnChange forcedTheme="dark" {...props}>
       {children}
     </NextThemesProvider>
   )
