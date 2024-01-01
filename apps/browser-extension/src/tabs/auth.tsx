@@ -7,20 +7,20 @@ import { ThemeSupa } from '@supabase/auth-ui-shared'
 
 import { Button } from '@repo/ui'
 
-import { AuthProvider, useAuth } from '../components/auth-provider'
+import { AuthProvider, useAuth } from '../providers/auth-provider'
 import { supabase } from '../supabase/supabase-client'
 
 import '@repo/ui/global.css'
 import '../global.css'
 
 function AuthPageContents() {
-  const { isLoadingAuth, user, signOut } = useAuth()
+  const { isLoadingAuth, session, signOut } = useAuth()
 
   if (isLoadingAuth) {
     return null
   }
 
-  if (user) {
+  if (session) {
     return (
       <div className="grid justify-center gap-4">
         <h2 className="text-3xl font-semibold">Logged in!</h2>

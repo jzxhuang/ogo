@@ -16,11 +16,14 @@
     "@supabase/auth-ui-react": "^0.4.6",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.39.1",
+    "@tanstack/react-query": "^5.17.0",
     "hook": "link:@plasmohq/storage/hook",
     "lucide-react": "^0.300.0",
     "plasmo": "0.84.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-hot-toast": "^2.4.1",
+    "sonner": "^1.3.1"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

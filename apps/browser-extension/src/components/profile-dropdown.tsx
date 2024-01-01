@@ -2,10 +2,21 @@ import { CircleUser } from 'lucide-react'
 
 import { Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@repo/ui'
 
-import { useAuth } from './auth-provider'
+import { useAuth } from '../providers/auth-provider'
 
 export function ProfileDropdown() {
-  const { isLoadingAuth, user, signOut } = useAuth()
+  const { isLoadingAuth, session, signOut } = useAuth()
+
+  if (isLoadingAuth) return null
+  if (!session) {
+    return (
+      <Button asChild size="sm" type="button" variant="outline">
+        <a href="/tabs/auth.html" rel="noreferrer" target="_blank">
+          Sign In
+        </a>
+      </Button>
+    )
+  }
 
   return (
     <DropdownMenu>
@@ -22,15 +33,14 @@ export function ProfileDropdown() {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent collisionPadding={8}>
-        {user ? (
-          <DropdownMenuItem onClick={signOut}>Sign Out</DropdownMenuItem>
-        ) : (
-          <DropdownMenuItem asChild>
-            <a href="/tabs/auth.html" rel="noreferrer" target="_blank">
-              Sign In
-            </a>
-          </DropdownMenuItem>
-        )}
+        <DropdownMenuItem
+          className="cursor-pointer"
+          onClick={() => {
+            void signOut()
+          }}
+        >
+          Sign Out
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
