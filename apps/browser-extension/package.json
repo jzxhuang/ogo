@@ -1,29 +1,29 @@
 {
-  "name": "ogo-browser-extension",
-  "displayName": "ogo: open source go links",
+  "name": "ogo",
+  "displayName": "ogo: open-source go links",
   "version": "0.0.1",
-  "description": "Browser extension for ogo go links",
-  "author": "jzxhuang",
+  "description": "Free, open-source go links built with Next.js and Supabase. Easy to self-host.",
+  "author": "Jeff Huang <jeff.huang62@gmail.com>",
+  "scripts": {
+    "dev": "plasmo dev",
+    "build": "plasmo build",
+    "test": "plasmo test"
+  },
   "dependencies": {
+    "plasmo": "0.84.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
+  "devDependencies": {
+    "@repo/ui": "workspace:*",
+    "@types/chrome": "0.0.251",
+    "@types/node": "20.9.0",
+    "@types/react": "18.2.37",
+    "@types/react-dom": "18.2.15"
+  },
   "manifest": {
     "host_permissions": [
-      "*://go/*"
-    ],
-    "permissions": [
-      "declarativeNetRequest",
-      "storage",
-      "tabs"
-    ],
-    "commands": {
-      "_execute_action": {
-        "suggested_key": {
-          "default": "Ctrl+Shift+Y",
-          "mac": "Command+Shift+Y"
-        }
-      }
-    }
+      "https://*/*"
+    ]
   }
 }

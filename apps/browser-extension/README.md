@@ -1,14 +1,14 @@
-# apps/browser-extension
+This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with [`plasmo init`](https://www.npmjs.com/package/plasmo).
 
-This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with [`plasmo init`](https://www.npmjs.com/package/plasmo) and adapted for Nx.
+## Getting Started
 
-## Dev Server
+First, run the development server:
 
 ```bash
-yarn start browser-extension
+pnpm dev
+# or
+npm run dev
 ```
-
-`package.json` is included in this application because it's required by Plasmo to specify the manifest. We must also specify `react` in the dependencies in order for Plasmo to detect and support React.
 
 Open your browser and load the appropriate development build. For example, if you are developing for the chrome browser, using manifest v3, use: `build/chrome-mv3-dev`.
 
@@ -21,7 +21,9 @@ For further guidance, [visit our Documentation](https://docs.plasmo.com/)
 Run the following:
 
 ```bash
-yarn nx run browser-extension:dev
+pnpm build
+# or
+npm run build
 ```
 
 This should create a production bundle for your extension, ready to be zipped and published to the stores.
