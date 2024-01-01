@@ -1,31 +1,125 @@
-import { useState } from 'react'
+/**
+ * This is the main popup component that is rendered when the user clicks on the extension icon.
+ *
+ * @see https://docs.plasmo.com/framework/ext-pages
+ */
 
-import { Input } from '@repo/ui'
+import { Settings as SettingsIcon } from 'lucide-react'
+import { useCallback, useEffect, useState } from 'react'
 
 import '@repo/ui/global.css'
 import './global.css'
 
+import { Input } from '@repo/ui'
+
+import { getDomainUrl } from './storage'
+
 function IndexPopup() {
-  const [data, setData] = useState('')
+  const [description, setDescription] = useState('')
+  const [name, setName] = useState('')
+  const [url, setUrl] = useState('')
+
+  /**
+   * On opening the popup, we read the current tab's URL and title and prefill the form.
+   */
+  useEffect(() => {
+    void chrome.tabs.query({ active: true, lastFocusedWindow: true }).then(([tab]) => {
+      if (tab.url) setUrl(tab.url)
+      if (tab.title) setDescription(tab.title)
+    })
+  }, [])
+
+  const onSubmit = useCallback<React.FormEventHandler>(
+    async (e) => {
+      e.preventDefault()
+      const domain = await getDomainUrl()
+      const params = new URLSearchParams({ ogoBrowserExtension: 'true', name, url, description })
+      void chrome.tabs.create({ url: `${domain}/new?${params.toString()}` })
+    },
+    [description, name, url],
+  )
 
   return (
-    <div
-      style={{
-        padding: 16,
-      }}
-    >
-      <h2>
-        Welcome to your{' '}
-        <a href="https://www.plasmo.com" target="_blank">
-          Plasmo
-        </a>{' '}
-        Extension!
-      </h2>
-      <input onChange={(e) => setData(e.target.value)} value={data} />
-      <Input />
-      <a href="https://docs.plasmo.com" target="_blank">
-        View Docs
-      </a>
+    <div className="grid min-w-[32rem] bg-white p-4 ">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-semibold text-black">Create new go link</h2>
+        <button
+          className="text-gray-500 transition-colors hover:text-black"
+          onClick={() => {
+            chrome.runtime.openOptionsPage()
+          }}
+          type="button"
+        >
+          <SettingsIcon size={20} />
+        </button>
+      </div>
+
+      <form className="grid grid-flow-row gap-5 pt-4" onSubmit={onSubmit}>
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- it is associated with an input */}
+        <label className="flex flex-col gap-1">
+          <h3 className="text-sm font-medium">
+            Destination URL<span className="text-red-600">*</span>
+          </h3>
+          <Input
+            className="h-12 py-3"
+            onChange={(e) => {
+              setUrl(e.target.value)
+            }}
+            placeholder="https://google.com"
+            required
+            type="url"
+            value={url}
+          />
+        </label>
+
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- it is associated with an input */}
+        <label className="flex flex-col gap-1">
+          <h3 className="text-sm font-medium">
+            Link Name<span className="text-red-600">*</span>
+          </h3>
+          <div className="flex h-12 w-full items-center overflow-hidden rounded-md border text-sm focus-within:ring-1 focus-within:ring-ring focus:outline-none">
+            <div className="h-full bg-slate-200 px-3 py-3">go/</div>
+            <Input
+              // eslint-disable-next-line jsx-a11y/no-autofocus -- allow autofocus
+              autoFocus
+              className="h-full rounded-none border-none focus-visible:ring-0"
+              maxLength={256}
+              onChange={(e) => {
+                setName(e.target.value)
+              }}
+              pattern="^[A-z0-9_\-]+$"
+              placeholder="link"
+              required
+              title="Only alphanumeric characters, - and _ are allowed."
+              type="text"
+              value={name}
+            />
+          </div>
+        </label>
+
+        <label className="flex flex-col gap-1">
+          <h3 className="text-sm font-medium">Description</h3>
+          <textarea
+            className="w-full rounded-md border p-3 text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            maxLength={1000}
+            onChange={(e) => {
+              setDescription(e.target.value)
+            }}
+            placeholder="Enter a description..."
+            rows={2}
+            value={description}
+          />
+        </label>
+
+        <div className="flex gap-3 justify-self-center">
+          <button
+            className="inline-flex justify-center rounded-md border border-transparent bg-purple-500 px-4 py-2 font-medium text-white  transition-colors hover:bg-purple-600"
+            type="submit"
+          >
+            Create go link
+          </button>
+        </div>
+      </form>
     </div>
   )
 }
