@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
-// import '@repo/ui/styles.css'
-import './globals.css'
+import '@repo/ui/global.css'
+import './global.css'
 
 import { Providers } from './providers'
 
