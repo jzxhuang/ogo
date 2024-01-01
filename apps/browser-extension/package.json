@@ -2,7 +2,7 @@
   "name": "browser-extension",
   "displayName": "ogo: open-source go links",
   "version": "0.0.1",
-  "description": "Free, open-source go links built with Next.js and Supabase. Easy to self-host.",
+  "description": "Free, open-source go links built with Next.js, Supabase and Plasmo. Easy to self-host.",
   "author": "jzxhuang",
   "scripts": {
     "dev": "plasmo dev",
@@ -10,7 +10,9 @@
     "test": "plasmo test"
   },
   "dependencies": {
+    "@plasmohq/storage": "^1.9.0",
     "@repo/ui": "workspace:*",
+    "lucide-react": "^0.300.0",
     "plasmo": "0.84.0",
     "react": "18.2.0",
     "react-dom": "18.2.0"
@@ -28,7 +30,20 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://*/*"
-    ]
+      "*://go/*"
+    ],
+    "permissions": [
+      "declarativeNetRequest",
+      "storage",
+      "tabs"
+    ],
+    "commands": {
+      "_execute_action": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+Y",
+          "mac": "Command+Shift+Y"
+        }
+      }
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { DOMAIN_STORAGE_KEY } from '../constants'
-import { setRedirectRule } from '../declarative-net-request/set-redirect-rule'
+import { setRedirectRule } from '../declarative-net-request'
 
 type OnStorageChanged = Parameters<chrome.storage.StorageChangedEvent['addListener']>[0]
 
@@ -9,7 +9,8 @@ type OnStorageChanged = Parameters<chrome.storage.StorageChangedEvent['addListen
 export const onStorageChanged: OnStorageChanged = (changes, areaName) => {
   if (areaName !== 'sync') return
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- incorrect type
   if (changes[DOMAIN_STORAGE_KEY]) {
-    setRedirectRule(changes[DOMAIN_STORAGE_KEY].newValue as string)
+    void setRedirectRule(changes[DOMAIN_STORAGE_KEY].newValue as string)
   }
 }
