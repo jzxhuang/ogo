@@ -10,15 +10,18 @@ import { useCallback, useEffect, useState } from 'react'
 import '@repo/ui/global.css'
 import './global.css'
 
-import { Input } from '@repo/ui'
+import { Button, Input } from '@repo/ui'
 
+import { AuthProvider } from './components/auth-provider'
 import { CreateLinkRestriction } from './components/create-link-restriction'
+import { ProfileDropdown } from './components/profile-dropdown'
 import { getDomainUrl } from './storage'
 
-function IndexPopup() {
-  const [description, setDescription] = useState('')
-  const [name, setName] = useState('')
+function IndexPopupContent() {
+  // form state
   const [url, setUrl] = useState('')
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
 
   /**
    * On opening the popup, we read the current tab's URL and title and prefill the form.
@@ -44,15 +47,20 @@ function IndexPopup() {
     <div className="grid min-w-[32rem] gap-3 bg-white p-4">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold text-black">ogo</h2>
-        <button
-          className="text-gray-500 transition-colors hover:text-black"
-          onClick={() => {
-            chrome.runtime.openOptionsPage()
-          }}
-          type="button"
-        >
-          <SettingsIcon size={20} />
-        </button>
+        <div className="flex gap-0.5">
+          <ProfileDropdown />
+          <Button
+            className="h-auto w-auto p-1.5 text-gray-500"
+            onClick={() => {
+              chrome.runtime.openOptionsPage()
+            }}
+            size="icon"
+            type="button"
+            variant="ghost"
+          >
+            <SettingsIcon size={16} />
+          </Button>
+        </div>
       </div>
 
       <CreateLinkRestriction />
@@ -124,6 +132,14 @@ function IndexPopup() {
         </div>
       </form>
     </div>
+  )
+}
+
+function IndexPopup() {
+  return (
+    <AuthProvider>
+      <IndexPopupContent />
+    </AuthProvider>
   )
 }
 
