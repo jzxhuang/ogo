@@ -12,6 +12,7 @@ import './global.css'
 
 import { Input } from '@repo/ui'
 
+import { CreateLinkRestriction } from './components/create-link-restriction'
 import { getDomainUrl } from './storage'
 
 function IndexPopup() {
@@ -40,9 +41,9 @@ function IndexPopup() {
   )
 
   return (
-    <div className="grid min-w-[32rem] bg-white p-4 ">
+    <div className="grid min-w-[32rem] gap-3 bg-white p-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-black">Create new go link</h2>
+        <h2 className="text-2xl font-semibold text-black">ogo</h2>
         <button
           className="text-gray-500 transition-colors hover:text-black"
           onClick={() => {
@@ -54,7 +55,9 @@ function IndexPopup() {
         </button>
       </div>
 
-      <form className="grid grid-flow-row gap-5 pt-4" onSubmit={onSubmit}>
+      <CreateLinkRestriction />
+
+      <form className="grid grid-flow-row gap-5 pt-2" onSubmit={onSubmit}>
         {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- it is associated with an input */}
         <label className="flex flex-col gap-1">
           <h3 className="text-sm font-medium">
