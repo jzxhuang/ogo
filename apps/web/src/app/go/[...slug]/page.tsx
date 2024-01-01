@@ -17,7 +17,7 @@ export default async function GolinkPage({ params }: { params: { slug: string[] 
   const cookieStore = cookies()
 
   const supabase = createServerClient(
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- we know these are defined
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, turbo/no-undeclared-env-vars -- we know these are defined
     process.env.SUPABASE_URL!,
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, turbo/no-undeclared-env-vars -- we know these are defined
     process.env.SUPABASE_ANON_KEY!,
