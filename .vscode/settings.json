@@ -1,4 +1,4 @@
 {
   "cSpell.words": ["golink"],
-  "typescript.preferences.importModuleSpecifier": "project-relative"
+  "eslint.workingDirectories": [{ "mode": "auto" }]
 }

@@ -1,12 +1,12 @@
-import { setRedirectRule } from '../declarative-net-request/set-redirect-rule'
+import { setRedirectRule } from '../declarative-net-request'
 
 /**
  * On install:
  * - Register the dynamic rule for redirecting go/* requests
- * - Open https://go to "teach" Chrome recognize `go/` as a valid hostname
+ * - Open https://go to "teach" the browser to recognize `go/` as a valid hostname
  * - Immediately close the new tab, and re-focus the previous tab
  *
- * Docs: https://developer.chrome.com/docs/extensions/reference/runtime/#event-onInstalled
+ * @see https://developer.chrome.com/docs/extensions/reference/runtime/#event-onInstalled
  */
 export async function onInstalled(details: chrome.runtime.InstalledDetails) {
   // Register the dynamic rule on install
@@ -32,10 +32,10 @@ export async function onInstalled(details: chrome.runtime.InstalledDetails) {
 
     // Immediately close the new tab, and re-focus the previous tab
     if (changeInfo.status === 'loading') {
-      chrome.tabs.remove(tabId)
+      void chrome.tabs.remove(tabId)
       if (tabs.length === 1) {
         const tab = tabs[0]
-        if (tab.id) chrome.tabs.update(tab.id, { active: true })
+        if (tab.id) void chrome.tabs.update(tab.id, { active: true })
       }
     }
   })
