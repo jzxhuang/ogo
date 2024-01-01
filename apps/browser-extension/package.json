@@ -10,8 +10,13 @@
     "test": "plasmo test"
   },
   "dependencies": {
+    "@plasmohq/messaging": "^0.6.1",
     "@plasmohq/storage": "^1.9.0",
     "@repo/ui": "workspace:*",
+    "@supabase/auth-ui-react": "^0.4.6",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/supabase-js": "^2.39.1",
+    "hook": "link:@plasmohq/storage/hook",
     "lucide-react": "^0.300.0",
     "plasmo": "0.84.0",
     "react": "18.2.0",
