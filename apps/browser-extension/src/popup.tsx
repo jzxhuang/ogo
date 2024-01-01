@@ -8,7 +8,7 @@ import { Settings as SettingsIcon } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 
 import '@repo/ui/global.css'
-import './global.css'
+import './styles.css'
 
 import { toast } from 'react-hot-toast'
 

@@ -11,7 +11,7 @@ import { AuthProvider, useAuth } from '../providers/auth-provider'
 import { supabase } from '../supabase/supabase-client'
 
 import '@repo/ui/global.css'
-import '../global.css'
+import '../styles.css'
 
 function AuthPageContents() {
   const { isLoadingAuth, session, signOut } = useAuth()

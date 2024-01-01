@@ -10,7 +10,7 @@ import { DEFAULT_WEB_URL } from './constants'
 import { getDomainUrl, setDomainUrl } from './storage'
 
 import '@repo/ui/global.css'
-import './global.css'
+import './styles.css'
 
 import { Input } from '@repo/ui'
 
