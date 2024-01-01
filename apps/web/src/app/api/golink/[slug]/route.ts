@@ -28,12 +28,10 @@ const createSupabaseClient = () => {
   return supabase
 }
 
-export const newGoLinkSchema = z.object({
+const newGoLinkSchema = z.object({
   destination: z.string().url(),
   description: z.string().max(1000).optional(),
 })
-
-export type NewGoLink = z.infer<typeof newGoLinkSchema>
 
 /**
  * Get a go link by slug, if it exists.
