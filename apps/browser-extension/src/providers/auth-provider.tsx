@@ -1,7 +1,7 @@
 import { sendToBackground } from '@plasmohq/messaging'
 import { Storage } from '@plasmohq/storage'
 import { useStorage } from '@plasmohq/storage/hook'
-import type { User } from '@supabase/supabase-js'
+import type { Session } from '@supabase/supabase-js'
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 
 import { supabase } from '../supabase/supabase-client'
@@ -16,13 +16,13 @@ const stub = createContextStub('AuthContext')
 
 export type AuthContextT = {
   isLoadingAuth: boolean
-  user: User | null
+  session: Session | null
   signOut: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextT>({
   isLoadingAuth: true,
-  user: null,
+  session: null,
   signOut: stub,
 })
 
@@ -32,8 +32,8 @@ const AuthContext = createContext<AuthContextT>({
 export function AuthProvider({ children }: React.PropsWithChildren<object>) {
   const [isLoadingAuth, setIsLoadingAuth] = useState(true)
 
-  const [user, setUser] = useStorage<User | null>({
-    key: 'user',
+  const [session, setSession] = useStorage<Session | null>({
+    key: 'session',
     instance: new Storage({
       area: 'local',
     }),
@@ -50,11 +50,11 @@ export function AuthProvider({ children }: React.PropsWithChildren<object>) {
       const {
         data: { subscription },
       } = supabase.auth.onAuthStateChange((_event, session) => {
-        setUser(session?.user ?? null)
+        setSession(session)
       })
 
       if (data.session) {
-        void setUser(data.session.user)
+        void setSession(data.session)
         void sendToBackground({
           name: 'init-session',
           body: {
@@ -68,14 +68,14 @@ export function AuthProvider({ children }: React.PropsWithChildren<object>) {
     }
 
     void init()
-  }, [setUser])
+  }, [setSession])
 
   const signOut = useCallback(async () => {
     await supabase.auth.signOut()
-    void setUser(null)
-  }, [setUser])
+    void setSession(null)
+  }, [setSession])
 
-  return <AuthContext.Provider value={{ isLoadingAuth, user, signOut }}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={{ isLoadingAuth, session, signOut }}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

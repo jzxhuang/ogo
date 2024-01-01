@@ -10,44 +10,67 @@ import { useCallback, useEffect, useState } from 'react'
 import '@repo/ui/global.css'
 import './global.css'
 
+import { toast } from 'react-hot-toast'
+
 import { Button, Input } from '@repo/ui'
 
-import { AuthProvider } from './components/auth-provider'
 import { CreateLinkRestriction } from './components/create-link-restriction'
 import { ProfileDropdown } from './components/profile-dropdown'
-import { getDomainUrl } from './storage'
+import { Providers } from './providers/providers'
+import { useCreateGoLinkMutation } from './queries/create-go-link'
 
 function IndexPopupContent() {
   // form state
-  const [url, setUrl] = useState('')
-  const [name, setName] = useState('')
+  const [destination, setDestination] = useState('')
+  const [slug, setSlug] = useState('')
   const [description, setDescription] = useState('')
+
+  const createGoLink = useCreateGoLinkMutation()
 
   /**
    * On opening the popup, we read the current tab's URL and title and prefill the form.
    */
   useEffect(() => {
     void chrome.tabs.query({ active: true, lastFocusedWindow: true }).then(([tab]) => {
-      if (tab.url) setUrl(tab.url)
+      if (tab.url) {
+        let destinationUrl = tab.url.trim()
+        if (destinationUrl.endsWith('/')) {
+          destinationUrl = destinationUrl.slice(0, -1)
+        }
+        setDestination(destinationUrl)
+      }
       if (tab.title) setDescription(tab.title)
     })
   }, [])
 
   const onSubmit = useCallback<React.FormEventHandler>(
-    async (e) => {
+    (e) => {
       e.preventDefault()
-      const domain = await getDomainUrl()
-      const params = new URLSearchParams({ ogoBrowserExtension: 'true', name, url, description })
-      void chrome.tabs.create({ url: `${domain}/new?${params.toString()}` })
+      createGoLink.mutate(
+        { destination, slug, description },
+        {
+          onSuccess() {
+            toast.success(
+              <span>
+                <b>go/{slug}</b> created!
+              </span>,
+              { duration: 5000 },
+            )
+          },
+          onError() {
+            toast.error('Something went wrong.')
+          },
+        },
+      )
     },
-    [description, name, url],
+    [createGoLink, destination, slug, description],
   )
 
   return (
     <div className="grid min-w-[32rem] gap-3 bg-white p-4">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold text-black">ogo</h2>
-        <div className="flex gap-0.5">
+        <div className="flex">
           <ProfileDropdown />
           <Button
             className="h-auto w-auto p-1.5 text-gray-500"
@@ -74,12 +97,12 @@ function IndexPopupContent() {
           <Input
             className="h-12 py-3"
             onChange={(e) => {
-              setUrl(e.target.value)
+              setDestination(e.target.value)
             }}
             placeholder="https://google.com"
             required
             type="url"
-            value={url}
+            value={destination}
           />
         </label>
 
@@ -96,14 +119,14 @@ function IndexPopupContent() {
               className="h-full rounded-none border-none focus-visible:ring-0"
               maxLength={256}
               onChange={(e) => {
-                setName(e.target.value)
+                setSlug(e.target.value)
               }}
               pattern="^[A-z0-9_\-]+$"
               placeholder="link"
               required
               title="Only alphanumeric characters, - and _ are allowed."
               type="text"
-              value={name}
+              value={slug}
             />
           </div>
         </label>
@@ -125,6 +148,7 @@ function IndexPopupContent() {
         <div className="flex gap-3 justify-self-center">
           <button
             className="inline-flex justify-center rounded-md border border-transparent bg-purple-500 px-4 py-2 font-medium text-white  transition-colors hover:bg-purple-600"
+            disabled={createGoLink.isPending}
             type="submit"
           >
             Create go link
@@ -137,9 +161,9 @@ function IndexPopupContent() {
 
 function IndexPopup() {
   return (
-    <AuthProvider>
+    <Providers>
       <IndexPopupContent />
-    </AuthProvider>
+    </Providers>
   )
 }
 
